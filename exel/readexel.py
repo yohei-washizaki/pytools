@@ -23,7 +23,13 @@ class Command:
             self.arg          = row[4]
 
     def __str__(self):
-       return '{' + self.command.encode('utf-8') + ', ' + self.target.encode('utf-8') + ', ' + self.text.encode('utf-8') + ', ' + str(self.animation_id) + ', ' + str(self.arg) + '}';
+       return '{'                                 + \
+              self.command.encode('utf-8') + ', ' + \
+              self.target.encode('utf-8')  + ', ' + \
+              self.text.encode('utf-8')    + ', ' + \
+              str(self.animation_id)       + ', ' + \
+              str(self.arg)                +        \
+              '}';
 
 class CommandEncoder(JSONEncoder):
     def default(self, command):

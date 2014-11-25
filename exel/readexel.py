@@ -51,10 +51,7 @@ def row_to_command(row):
     cmd = Command(row)
     return cmd
 
-def main():
-    # 引数から開くべきファイル名を取得
-    book_filename = sys.argv[1]
-    
+def main(book_filename):
     # ワークブックを開く
     workbook = xlrd.open_workbook(book_filename)
 
@@ -75,7 +72,13 @@ def main():
     text = json.dumps(command_set, cls=CommandEncoder, ensure_ascii=False, indent=2)
     print text.encode('utf-8')
 
+# emacs からテストするときに使う
+# main('commandlist.xlsx')
+
 if __name__ == '__main__':
-    main()
+    # 引数から開くべきファイル名を取得
+    book_filename = sys.argv[1]
+    
+    main(book_filename)
 
 

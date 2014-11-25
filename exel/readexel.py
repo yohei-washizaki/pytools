@@ -4,6 +4,7 @@
 import xlrd
 import json
 import sys
+import argparse
 from json import JSONEncoder
 
 class Command:
@@ -51,9 +52,27 @@ def row_to_command(row):
     cmd = Command(row)
     return cmd
 
-def main(book_filename):
+def main():
+    # コマンドラインオプションを解析する
+    parser = argparse.ArgumentParser(description='foo')
+    parser.add_argument('filename', nargs='+')
+    parser.add_argument('--pretty-print', action='store_true', help='pretty print output')
+    parser.add_argument('--indent', nargs='?', type=int, default=4, const=4, choices=[1,2,3,4,8], help='this option is available when --pretty-print is passed')
+    args = parser.parse_args('commandlist.xlsx --indent 4'.split())
+
+    print args
+    print args.filename
+    print args.pretty_print
+    print args.indent
+
+    args = parser.parse_args('--help'.split())
+    return
+
+    # テストのためにファイル名は取得できたものとする
+    workbook_filename = 'commandlist.xlsx'
+    
     # ワークブックを開く
-    workbook = xlrd.open_workbook(book_filename)
+    workbook = xlrd.open_workbook(workbook_filename)
 
     # シートを取得
     sheet = workbook.sheet_by_index(0)
@@ -72,13 +91,9 @@ def main(book_filename):
     text = json.dumps(command_set, cls=CommandEncoder, ensure_ascii=False, indent=2)
     print text.encode('utf-8')
 
-# emacs からテストするときに使う
-# main('commandlist.xlsx')
+
+main()
 
 if __name__ == '__main__':
-    # 引数から開くべきファイル名を取得
-    book_filename = sys.argv[1]
-    
-    main(book_filename)
-
+    main()
 

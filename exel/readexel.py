@@ -24,13 +24,13 @@ class Command:
             self.arg          = row[4]
 
     def __str__(self):
-       return '{'                                 + \
+       return '{ '                                + \
               self.command.encode('utf-8') + ', ' + \
-              self.target.encode('utf-8')  + ', ' + \
-              self.text.encode('utf-8')    + ', ' + \
+              self.target .encode('utf-8') + ', ' + \
+              self.text   .encode('utf-8') + ', ' + \
               str(self.animation_id)       + ', ' + \
               str(self.arg)                +        \
-              '}';
+              ' }';
 
 class CommandEncoder(JSONEncoder):
     def default(self, command):
@@ -52,25 +52,7 @@ def row_to_command(row):
     cmd = Command(row)
     return cmd
 
-def main():
-    # コマンドラインオプションを解析する
-    parser = argparse.ArgumentParser(description='foo')
-    parser.add_argument('filename', nargs='+')
-    parser.add_argument('--pretty-print', action='store_true', help='pretty print output')
-    parser.add_argument('--indent', nargs='?', type=int, default=4, const=4, choices=[1,2,3,4,8], help='this option is available when --pretty-print is passed')
-    args = parser.parse_args('commandlist.xlsx --indent 4'.split())
-
-    print args
-    print args.filename
-    print args.pretty_print
-    print args.indent
-
-    args = parser.parse_args('--help'.split())
-    return
-
-    # テストのためにファイル名は取得できたものとする
-    workbook_filename = 'commandlist.xlsx'
-    
+def test(workbook_filename, is_prettyprint, indent_width):
     # ワークブックを開く
     workbook = xlrd.open_workbook(workbook_filename)
 
@@ -88,11 +70,37 @@ def main():
     command_set = {'__commandlist__' : command_list}
 
     # 出力
-    text = json.dumps(command_set, cls=CommandEncoder, ensure_ascii=False, indent=2)
+    indent = indent_width if is_prettyprint == True else None
+    text = json.dumps(command_set, cls=CommandEncoder, ensure_ascii=False, indent=indent)
     print text.encode('utf-8')
+    
+
+def main():
+    # コマンドラインオプションを解析する
+    parser = argparse.ArgumentParser(description='foo')
+    parser.add_argument('filenames'       , nargs='+')
+    parser.add_argument('--pretty-print'  , action='store_true', help='pretty print output')
+    parser.add_argument('--indent'        , nargs='?', type=int, default=4, const=4, metavar='N', help='this option is only available when --pretty-print option is passed to %(prog)s')
+    parser.add_argument('--verbose'       , action='store_true', default=False, help='for development')
+    #    args = parser.parse_args('commandlist.xlsx --pretty-print --indent=4'.split())
+    args = parser.parse_args()
+
+    # verbose logs for development
+    if args.verbose == True:
+        print '--------------------'
+        print 'All arguments : ' + str(args)
+        print 'File names    : ' + str(args.filenames)
+        print 'Pretty print  : ' + str(args.pretty_print)
+        print 'Indent width  : ' + str(args.indent)
+        print '--------------------'
+
+    for filename in args.filenames:
+        test(filename, args.pretty_print, args.indent)
+    
 
 
-main()
+
+#main()
 
 if __name__ == '__main__':
     main()

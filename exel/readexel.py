@@ -98,10 +98,6 @@ def main():
         test(filename, args.pretty_print, args.indent)
     
 
-
-
-#main()
-
 if __name__ == '__main__':
     main()
 

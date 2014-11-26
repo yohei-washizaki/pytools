@@ -67,7 +67,7 @@ def test(workbook_filename, is_prettyprint, indent_width):
         command_list.append(cmd)
 
     # コマンドオブジェクトとしてまとめる
-    command_set = {'__commandlist__' : command_list}
+    command_set = {'command-set' : command_list}
 
     # 出力
     indent = indent_width if is_prettyprint == True else None

@@ -78,7 +78,7 @@ def test(workbook_filename, is_prettyprint, indent_width):
 def main():
     # コマンドラインオプションを解析する
     parser = argparse.ArgumentParser(description='foo')
-    parser.add_argument('filenames'       , nargs='+')
+    parser.add_argument('filename'        , nargs='+')
     parser.add_argument('--pretty-print'  , action='store_true', help='pretty print output')
     parser.add_argument('--indent'        , nargs='?', type=int, default=4, const=4, metavar='N', help='this option is only available when --pretty-print option is passed to %(prog)s')
     parser.add_argument('--verbose'       , action='store_true', default=False, help='for development')
@@ -89,12 +89,12 @@ def main():
     if args.verbose == True:
         print '--------------------'
         print 'All arguments : ' + str(args)
-        print 'File names    : ' + str(args.filenames)
+        print 'File names    : ' + str(args.filename)
         print 'Pretty print  : ' + str(args.pretty_print)
         print 'Indent width  : ' + str(args.indent)
         print '--------------------'
 
-    for filename in args.filenames:
+    for filename in args.filename:
         test(filename, args.pretty_print, args.indent)
     
 
